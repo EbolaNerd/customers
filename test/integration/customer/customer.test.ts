@@ -11,10 +11,10 @@ let age: number | null;
 let calculatorMock: jest.SpyInstance;
 
 const exec = () => {
-   return request(server).post("/api/users").send({ name, phone, age });
+   return request(server).post("/api/customer").send({ name, phone, age });
 };
 
-describe("POST /users", () => {
+describe("POST /order", () => {
    beforeEach(() => {
       server = require("../../../src/index");
       name = "Lars Wolter";
@@ -28,7 +28,7 @@ describe("POST /users", () => {
       await server.close();
    });
 
-   describe("Create user", () => {
+   describe("Create customer", () => {
       it("should return status code 201", async () => {
          const response = await exec();
          expect(response.status).toEqual(201);
@@ -36,7 +36,7 @@ describe("POST /users", () => {
          expect(calculatorMock).toHaveBeenCalledWith(age);
       });
 
-      it("should return the created user", async () => {
+      it("should return the created customer", async () => {
          const response = await exec();
          expect(response.body).toHaveProperty("id");
          expect(response.body).toHaveProperty("name", name);
@@ -60,7 +60,7 @@ describe("POST /users", () => {
          calculatorMock = jest.spyOn(calculator, "validateAge").mockReturnValue(false);
          const response = await exec();
 
-         expect(response.text).toEqual("User must be of age 18 or above");
+         expect(response.text).toEqual("Customer must be of age 18 or above");
          expect(calculatorMock).toHaveBeenCalledWith(age);
       });
    });

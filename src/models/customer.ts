@@ -1,4 +1,4 @@
-export default interface User {
+export default interface Customer {
    id: number;
    name: string;
    phone: string;

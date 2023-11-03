@@ -1,21 +1,21 @@
 import express, { Router, Request, Response } from "express";
-import User from "../models/user";
+import Customer from "../models/customer";
 import { validateAge } from "../utils/calculator";
 const router: Router = express.Router();
 
-//In-mem users repo v1.0.5
-const users: User[] = [];
+//In-mem customers repo v1.0.5
+const customers: Customer[] = [];
 
 router.get("/", (req: Request, res: Response) => {
-   res.send(users);
+   res.send(customers);
 });
 
 router.get("/:id", (req: Request, res: Response) => {
    const id = req.params.id;
    if (!id) return res.status(401).send("Invalid request");
 
-   const user = users.find((u) => u.id === parseInt(id));
-   if (!user) return res.status(404).send("User not found");
+   const user = customers.find((u) => u.id === parseInt(id));
+   if (!user) return res.status(404).send("Customer not found");
 
    res.send(user);
 });
@@ -26,27 +26,27 @@ router.post("/", (req: Request, res: Response) => {
    if (!phone) return res.status(401).send("Please provide phone number");
    if (!age) return res.status(401).send("Please provide age");
 
-   if (!validateAge(age)) return res.status(401).send("User must be of age 18 or above");
+   if (!validateAge(age)) return res.status(401).send("Customer must be of age 18 or above");
 
-   const user = { id: users.length + 1, name: name, phone: phone, age: age };
-   users.push(user);
+   const customer = { id: customers.length + 1, name: name, phone: phone, age: age };
+   customers.push(customer);
 
-   res.status(201).send(user);
+   res.status(201).send(customer);
 });
 
 router.delete("/:id", (req: Request, res: Response) => {
    const id = req.params.id;
    if (!id) return res.status(401).send("Invalid request");
 
-   const user = users.find((u) => u.id === parseInt(id));
-   if (!user) return res.status(404).send("User not found");
+   const customer = customers.find((u) => u.id === parseInt(id));
+   if (!customer) return res.status(404).send("Customer not found");
 
-   const index = users.indexOf(user);
-   users.splice(index, index + 1);
+   const index = customers.indexOf(customer);
+   customers.splice(index, index + 1);
 
-   console.log(JSON.stringify(user));
+   console.log(JSON.stringify(customer));
 
-   res.send(user);
+   res.send(customer);
 });
 
 export default router;
